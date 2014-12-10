@@ -1,0 +1,36 @@
+version = '1.0'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'hadoop'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile 'org.apache.hadoop:hadoop-common:2.5.1'
+    compile 'org.apache.hadoop:hadoop-mapreduce-client-core:2.5.1'
+    compile 'org.elasticsearch:elasticsearch-hadoop:2.0.2'
+}
+
+ext.hadoopSubDir = 'hadoop'
+ext.applicationName = 'gopher'
+
+hadoop {
+    buildSubDir = hadoopSubDir
+    applicationName = applicationName
+    mainClassName = 'com.clqb.app.InvertedIndex'
+}
+
+task run(type: Exec, dependsOn: hadoopInstall) {
+    executable "bash"
+    args "-c", ". ~/.bash_profile; \
+        ${buildDir}/${hadoopSubDir}/install/${applicationName}/bin/${project.name} \
+            /data/wiki-161m /output-gradle"
+}
