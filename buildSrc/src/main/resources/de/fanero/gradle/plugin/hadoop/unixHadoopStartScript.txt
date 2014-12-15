@@ -23,4 +23,5 @@ APP_NAME="${applicationName}"
 HADOOP_LIBJARS="${hadoopLibjars}"
 <% if (exportHadoopClasspath) print "export HADOOP_CLASSPATH=\"${exportHadoopClasspath}\"\n"
 %>
-exec hadoop jar "${appJar}" <% if (mainClassName) print mainClassName %> "\$@"
+#exec hadoop jar "${appJar}" <% if (mainClassName) print mainClassName %> "\$@"
+exec hadoop jar "${appJar}" <% if (mainClassName) print mainClassName %> -libjars "\${HADOOP_LIBJARS}" "\$@"

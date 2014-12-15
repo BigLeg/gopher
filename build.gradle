@@ -10,6 +10,9 @@ apply plugin: 'hadoop'
 
 repositories {
     mavenCentral()
+    maven {
+        url "http://conjars.org/repo"
+    }
 }
 
 dependencies {
@@ -19,18 +22,63 @@ dependencies {
     compile 'org.elasticsearch:elasticsearch-hadoop:2.0.2'
 }
 
+//ext.hadoopSubDir = 'hadoop'
+//ext.hadoopApplicationName = 'WordCountAtPage'
+//ext.hadoopMainClassName = 'com.clqb.app.WordCountAtPage'
+
+//ext.hadoopSubDir = 'hadoop'
+//ext.hadoopApplicationName = 'WordFreqAtPage'
+//ext.hadoopMainClassName = 'com.clqb.app.WordFreqAtPage'
+
+//ext.hadoopSubDir = 'hadoop'
+//ext.hadoopApplicationName = 'PageCount'
+//ext.hadoopMainClassName = 'com.clqb.app.PageCount'
+
+//ext.hadoopSubDir = 'hadoop'
+//ext.hadoopApplicationName = 'WordAtPageTFIDF'
+//ext.hadoopMainClassName = 'com.clqb.app.WordAtPageTFIDF'
+
 ext.hadoopSubDir = 'hadoop'
-ext.applicationName = 'gopher'
+ext.hadoopApplicationName = 'ElasticSearch'
+ext.hadoopMainClassName = 'com.clqb.app.ElasticSearch'
 
 hadoop {
     buildSubDir = hadoopSubDir
-    applicationName = applicationName
-    mainClassName = 'com.clqb.app.InvertedIndex'
+    applicationName = hadoopApplicationName
+    mainClassName = hadoopMainClassName
 }
 
-task run(type: Exec, dependsOn: hadoopInstall) {
+task runTFIDF_Phase1(type: Exec, dependsOn: hadoopInstall) {
     executable "bash"
     args "-c", ". ~/.bash_profile; \
-        ${buildDir}/${hadoopSubDir}/install/${applicationName}/bin/${project.name} \
-            /data/wiki-161m /output-gradle"
+        ${buildDir}/${hadoopSubDir}/install/${hadoopApplicationName}/bin/${project.name} \
+            /data/wiki-161m /output-TFIDF-1"
+}
+
+task runTFIDF_Phase2(type: Exec, dependsOn: hadoopInstall) {
+    executable "bash"
+    args "-c", ". ~/.bash_profile; \
+        ${buildDir}/${hadoopSubDir}/install/${hadoopApplicationName}/bin/${project.name} \
+            /output-TFIDF-1 /output-TFIDF-2"
+}
+
+task runTFIDF_Phase2_5(type: Exec, dependsOn: hadoopInstall) {
+    executable "bash"
+    args "-c", ". ~/.bash_profile; \
+        ${buildDir}/${hadoopSubDir}/install/${hadoopApplicationName}/bin/${project.name} \
+            /data/wiki-161m /output-TFIDF-2.5"
+}
+
+task runTFIDF_Phase3(type: Exec, dependsOn: hadoopInstall) {
+    executable "bash"
+    args "-c", ". ~/.bash_profile; \
+        ${buildDir}/${hadoopSubDir}/install/${hadoopApplicationName}/bin/${project.name} \
+            /output-TFIDF-2 /output-TFIDF-3"
+}
+
+task runElasticSearch(type: Exec, dependsOn: hadoopInstall) {
+    executable "bash"
+    args "-c", ". ~/.bash_profile; \
+        ${buildDir}/${hadoopSubDir}/install/${hadoopApplicationName}/bin/${project.name} \
+            /data/wiki-161m /output-elasticsearch"
 }
