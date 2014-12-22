@@ -23,10 +23,10 @@ I confirm that the arrangement is a mess, but is ok to develop locally. It's a m
  |- utils
   |- XmlInputFormat.java
   |- XmlUtils.java
-|- build.grade
+|- build.gradle
 ```
 
-To run different applications under `app` folder, I write different tasks in `build.grade`. __You may need to change them, e.g. `. ~/.bash_profile` in tasks.__ You can resort to any solutions as long as you export the PATH which includes the script `hadoop`.
+To run different applications under `app` folder, I write different tasks in `build.gradle`. __You may need to change them, e.g. `. ~/.bash_profile` in tasks.__ You can resort to any solutions as long as you export the PATH which includes the script `hadoop`.
 
 ## Instructions
 First make sure your hadoop daemons are running, i.e. you have run
@@ -62,7 +62,7 @@ gradle runTFIDF_Phase1
 or use GUI in your IDE.
 	
 #### Step 2: Run WordFreqAtPage
-* Uncomment the section in `build.grade`:
+* Uncomment the section in `build.gradle`:
 
 ```
 /* section WordFreqAtPage */
