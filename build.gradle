@@ -22,22 +22,27 @@ dependencies {
     compile 'org.elasticsearch:elasticsearch-hadoop:2.0.2'
 }
 
+/* section WordCountAtPage */
 //ext.hadoopSubDir = 'hadoop'
 //ext.hadoopApplicationName = 'WordCountAtPage'
 //ext.hadoopMainClassName = 'com.clqb.app.WordCountAtPage'
 
+/* section WordFreqAtPage */
 //ext.hadoopSubDir = 'hadoop'
 //ext.hadoopApplicationName = 'WordFreqAtPage'
 //ext.hadoopMainClassName = 'com.clqb.app.WordFreqAtPage'
 
+/* section PageCount */
 //ext.hadoopSubDir = 'hadoop'
 //ext.hadoopApplicationName = 'PageCount'
 //ext.hadoopMainClassName = 'com.clqb.app.PageCount'
 
+/* section WordAtPageTFIDF */
 //ext.hadoopSubDir = 'hadoop'
 //ext.hadoopApplicationName = 'WordAtPageTFIDF'
 //ext.hadoopMainClassName = 'com.clqb.app.WordAtPageTFIDF'
 
+/* section ElasticSearch */
 ext.hadoopSubDir = 'hadoop'
 ext.hadoopApplicationName = 'ElasticSearch'
 ext.hadoopMainClassName = 'com.clqb.app.ElasticSearch'
