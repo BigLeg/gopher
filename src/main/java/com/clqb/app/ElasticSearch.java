@@ -17,14 +17,27 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.elasticsearch.hadoop.mr.EsOutputFormat;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class ElasticSearch extends Configured implements Tool {
     public static class AwesomeMapper extends Mapper<LongWritable, Text, NullWritable, MapWritable> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            context.write(NullWritable.get(), XmlUtils.xmlTextToMapWritable(value));
+            try {
+                context.write(NullWritable.get(), XmlUtils.XmlTextToMapWritable(value));
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -35,16 +48,19 @@ public class ElasticSearch extends Configured implements Tool {
         Configuration conf = getConf();
         conf.set("xmlinput.start", "<page>");
         conf.set("xmlinput.end", "</page>");
-        conf.setBoolean("mapred.map.tasks.speculative.execution", false);
-        conf.setBoolean("mapred.reduce.tasks.speculative.execution", false);
+        conf.setBoolean("mapreduce.map.speculative", false);
+        conf.setBoolean("mapreduce.reduce.speculative", false);
         conf.set("es.nodes", "localhost:9200");
-        conf.set("es.resource", "radio/artists");
+        conf.set("es.resource", "wiki/pages");
 
         Job job = Job.getInstance(conf);
         job.setJarByClass(ElasticSearch.class);
         job.setInputFormatClass(XmlInputFormat.class);
         job.setOutputFormatClass(EsOutputFormat.class);
+        job.setMapOutputKeyClass(NullWritable.class);
         job.setMapOutputValueClass(MapWritable.class);
+        job.setOutputKeyClass(NullWritable.class);
+        job.setOutputValueClass(NullWritable.class);
         job.setMapperClass(AwesomeMapper.class);
         job.setReducerClass(AwesomeReducer.class);
 
