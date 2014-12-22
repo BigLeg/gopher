@@ -45,9 +45,9 @@ It takes steps to build the index: `WordCountAtPage`, `WordFreqAtPage`, `PageCou
 
 ```
 /* section WordCountAtPage */
-//ext.hadoopSubDir = 'hadoop'
-//ext.hadoopApplicationName = 'WordCountAtPage'
-//ext.hadoopMainClassName = 'com.clqb.app.WordCountAtPage'
+ext.hadoopSubDir = 'hadoop'
+ext.hadoopApplicationName = 'WordCountAtPage'
+ext.hadoopMainClassName = 'com.clqb.app.WordCountAtPage'
 ```
 
 * Comment all other sections in `build.gradle`.
