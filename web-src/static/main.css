@@ -1,0 +1,16 @@
+.inline {
+    display: inline-block !important;;
+}
+
+.logo {
+    /*width: 100px;*/
+    /*height: 100px;*/
+    /*display: block;*/
+    /*text-align: center;*/
+    /*margin: 0 auto;*/
+    /*vertical-align: middle;*/
+}
+
+.hightlight {
+    color: rgb(242, 109, 109) !important;
+}

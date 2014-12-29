@@ -1,0 +1,9 @@
+#Dependencies
+markdown:     rdiscount
+pygments:     true
+
+# Permalinks
+permalink:    pretty
+
+# Server
+url:          http://staticfile.org
