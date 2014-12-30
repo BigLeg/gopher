@@ -5,78 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Course project demo of Hadoop MapReduce Project in Fudan University">
     <title>Wikipedia Reader</title>
-    <link rel="stylesheet" href="//cdn.staticfile.org/typo.css/1.1/typo.css" />
-    <link rel="stylesheet" href="static/app.css" />
-    <link rel="stylesheet" href="static/main.css" />
-    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="//cdn.staticfile.org/typo.css/1.1/typo.css"/>
+    <link rel="stylesheet" href="static/app.css"/>
+    <link rel="stylesheet" href="static/main.css"/>
+    <link rel="shortcut icon" href="/favicon.ico"/>
 </head>
 <body ng-controller="libListCtrl">
 
 <div id="header" class="wrapper">
-  <h1 class="typo-h1"><a href="/">Wikipedia Reader</a></h1>
-  <div id="nav">
-    <span>Team Members:</span>
-    <a href="https://github.com/misaka-10032">蔡隆祺</a> /
-    <a href="https://github.com/qibinlou" target="_blank">娄琦彬</a>
-  </div>
-  <p id="purpose" class="typo-p">
-    Course Project Demo, Wikipedia Reader with ElasticSearch
-    <br/>
-    Usage Document: <a href="https://github.com/BigLeg/gopher/blob/master/README.md" class="hightlight" target="_blank">README</a>
-  </p>
-  <div id="query"><input id="key" type="text" ng-model="query" ng-change="fetchLibs(this)" placeholder="请输入搜索关键词..." autofocus autocomplete="off"/></div>
+    <h1 class="typo-h1"><a href="/">Wikipedia Reader</a></h1>
+
+    <div id="nav">
+        <span>Team Members:</span>
+        <a href="https://github.com/misaka-10032">蔡隆祺</a> /
+        <a href="https://github.com/qibinlou" target="_blank">娄琦彬</a>
+    </div>
+    <p id="purpose" class="typo-p">
+        Course Project Demo, Wikipedia Reader with ElasticSearch
+        <br/>
+        Usage Document: <a href="https://github.com/BigLeg/gopher/blob/master/README.md" class="hightlight" target="_blank">README</a>
+    </p>
+
+    <div id="query"><input id="key" type="text" ng-model="query" ng-change="fetchLibs(this)" placeholder="请输入搜索关键词..." autofocus autocomplete="off"/></div>
 </div>
 
 <div id="githubbtn" class="wrapper">
-  <iframe ng-src="http://ghbtns.com/github-btn.html?user=BigLeg&repo=gopher&type=watch&count=true" allowtransparency="true" frameborder="0" height="20px" scrolling="0" width="85px"></iframe>
-  <iframe ng-src="http://ghbtns.com/github-btn.html?user=BigLeg&repo=gopher&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
-</div>
-
-<div ng-if="!query && isPopular" id="popular" class="wrapper">
-  <span ng-repeat="lib in libs"><a href="#lib_{{lib.name}}"><img ng-src="static/logos/{{lib.name}}.png"/></a></span>
+    <iframe ng-src="http://ghbtns.com/github-btn.html?user=BigLeg&repo=gopher&type=watch&count=true" allowtransparency="true" frameborder="0" height="20px" scrolling="0" width="85px"></iframe>
+    <iframe ng-src="http://ghbtns.com/github-btn.html?user=BigLeg&repo=gopher&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
 </div>
 
 <div id="search">
-  <ol id="libs">
-    <li class="item typo" ng-repeat="lib in libs | filter:query.split(' ')[0]">
-      <h3 id="lib_{{lib.name}}">{{lib.name}}</h3>
-      <p class="item-description">{{lib.description}}</p>
-      <table>
-        <tr ng-repeat="asset in [lib.assets[0]]">
-          <th><small>[最新版]</small> {{asset.version}}</th>
-          <td>
-            <pre ng-repeat="file in asset.files"><code>http://cdn.staticfile.org/{{lib.name}}/{{asset.version}}/{{file}}</code></pre>
-          </td>
-        </tr>
-      </table>
-      <div class="item-meta typo-p">
-        <a ng-if="lib.homepage" href="{{lib.homepage}}" target="_blank">网站</a> <span ng-if="lib.homepage">/</span>
-        <a ng-if="lib.repositories[0].url" href="{{lib.repositories[0].url}}" target="_blank">源代码</a> <span ng-if="lib.repositories[0].url">/</span>
-        <a ng-if="lib.assets.length > 1" href="#id_{{lib.name | legalname}}" data-toggle="showhide">其他版本 &rarr;</a>
-      </div>
-      <table ng-if="lib.assets.length > 1" class="item-others" id="id_{{lib.name | legalname}}">
-        <tr ng-repeat="asset in lib.assets.slice(1)">
-          <th>{{asset.version}}</th>
-          <td>
-             <pre ng-repeat="file in asset.files"><code>http://cdn.staticfile.org/{{lib.name}}/{{asset.version}}/{{file}}</code></pre>
-          </td>
-        </tr>
-      </table>
-    </li>
-  </ol>
+    <ol id="pages">
+        <li class="item typo" ng-repeat="page in pages">
+            <h3 id="page_{{page._source.id}}">{{page._source.title}}</h3>
+
+            <p class="item-description">{{page._source.timestamp}}</p>
+
+            <div class="abstract-view" id="content_{{page._source.id}}">
+
+            </div>
+            <p class="hide">{{bruteInsert(page._source.id,page._source.revision.text)}}</p>
+            <div class="see-more-footer" state="0" ng-click="toggleWholePage('content_' + page._source.id, $event.target)">点击查看全文</div>
+
+        </li>
+    </ol>
 </div>
 
 <div id="footer" class="typo wrapper">
-  <div>
-    <p class="inline"><a href="http://www.wikipedia.com" target="_blank" class="logo"><img src="static/logos/Wikipedia.png" width="100" /></a><br><small>Content provided by Wikipedia</small></p>
-    <p class="inline"><a href="http://www.elasticsearch.org" target="_blank" class="logo"><img src="static/logos/elasticsearch.jpg" height="80" style="margin-bottom: 2em;" /></a><br><small>Powered by ElasticSearch</small></p>
-  </div>
-  <small>&copy; Copyright 2014 <a href="https://github.com/BigLeg/gopher">FDU Developers</a>. Built upon love.</small>
-  <small>Special thanks to <a href="staticfile.org">staticfile.org</a></small>
+    <div>
+        <p class="inline"><a href="http://www.wikipedia.com" target="_blank" class="logo"><img src="static/logos/Wikipedia.png" width="100"/></a><br>
+            <small>Content provided by Wikipedia</small>
+        </p>
+        <p class="inline"><a href="http://www.elasticsearch.org" target="_blank" class="logo"><img src="static/logos/elasticsearch.jpg" height="80" style="margin-bottom: 2em;"/></a><br>
+            <small>Powered by ElasticSearch</small>
+        </p>
+    </div>
+    <small>&copy; Copyright 2014 <a href="https://github.com/BigLeg/gopher">FDU Developers</a>. Built upon love.</small>
+    <small>Special thanks to <a href="staticfile.org">staticfile.org</a></small>
 </div>
 
 <script src="//cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-<script src="//cdn.staticfile.org/angular.js/1.1.5/angular.min.js"></script>
+<!--<script src="//cdn.staticfile.org/angular.js/1.1.5/angular.min.js"></script>-->
+<script src="http://cdn.staticfile.org/angular.js/1.3.0-beta.13/angular.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular-sanitize.js"></script>-->
+<script src="static/wikiparser.js"></script>
 <script src="static/app.js"></script>
 </body>
 </html>

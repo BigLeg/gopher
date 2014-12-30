@@ -1,6 +1,9 @@
 .inline {
     display: inline-block !important;;
 }
+.hide {
+    display: none !important;
+}
 
 .logo {
     /*width: 100px;*/
@@ -13,4 +16,25 @@
 
 .hightlight {
     color: rgb(242, 109, 109) !important;
+}
+
+.abstract-view {
+    max-height: 200px;
+    overflow-y: scroll;
+    padding-bottom: 30px;
+}
+
+.see-more-footer {
+    position: relative;
+    text-align: center;
+    display: block;
+    /*background-color: gainsboro;*/
+    padding: 5px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.see-more-footer:hover{
+    background-color: #1abc9c;
+    color: white;
 }
