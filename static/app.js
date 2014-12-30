@@ -61,9 +61,9 @@ function libListCtrl($scope) {
 
     var fetch = function (tag) {
 
-        tag = '?keywords=' + tag;
+        tag = '';
 
-        return $.getJSON(elasticServer + tag).done(function (data) {
+        return $.getJSON(elasticServer).done(function (data) {
             $scope.$apply(function () {
                 $scope.pages = data['hits'];
             });
