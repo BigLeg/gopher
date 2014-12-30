@@ -56,7 +56,7 @@ function libListCtrl($scope) {
         console.log(e);
     }
 
-    var elasticServer = 'mockup/result.json/';
+    var elasticServer = 'mockup/result.json';
     // var elasticServer = '/api.php';
 
     var fetch = function (tag) {
